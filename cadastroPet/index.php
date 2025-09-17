@@ -11,7 +11,53 @@ if (!isset($_SESSION['usuario'])) {
 // Dados do usuário
 $emailUsuario = $_SESSION['usuario_email'] ?? '';
 $nomeUsuario  = $_SESSION['usuario_nome'] ?? '';
-$fotoUsuario  = $_SESSION['usuario_foto'] ?? 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; // avatar padrão
+$fotoUsuario  = $_SESSION['usuario_foto'] ?? 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+
+// PROCESSAMENTO DO FORMULÁRIO
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome    = $_POST['nome'] ?? '';
+    $especie = $_POST['especie'] ?? '';
+    $raca    = $_POST['raca'] ?? '';
+    $idade   = $_POST['idade'] ?? null;
+    $dono    = $_POST['dono'] ?? '';
+    $fotoPet = null;
+
+    // Upload da foto do pet
+    if (!empty($_FILES['foto']['name'])) {
+        $pasta = "../uploads/pets/";
+        if (!is_dir($pasta)) {
+            mkdir($pasta, 0777, true);
+        }
+
+        $nomeArquivo = uniqid() . "-" . basename($_FILES['foto']['name']);
+        $caminho = $pasta . $nomeArquivo;
+
+        if (move_uploaded_file($_FILES['foto']['tmp_name'], $caminho)) {
+            $fotoPet = $caminho;
+        }
+    }
+
+    // Conexão com o banco vacinapets
+    $conexao = new mysqli("localhost", "root", "", "vacinapets");
+    if ($conexao->connect_error) {
+        die("Erro na conexão: " . $conexao->connect_error);
+    }
+
+    // Insert no banco
+    $sql = "INSERT INTO pets (nome, especie, raca, idade, dono, foto) 
+            VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conexao->prepare($sql);
+    $stmt->bind_param("sssiss", $nome, $especie, $raca, $idade, $dono, $fotoPet);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Pet cadastrado com sucesso!'); window.location='index.php';</script>";
+    } else {
+        echo "<script>alert('Erro ao cadastrar pet: " . $stmt->error . "');</script>";
+    }
+
+    $stmt->close();
+    $conexao->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
