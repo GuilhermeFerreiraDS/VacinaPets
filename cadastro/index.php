@@ -105,3 +105,5 @@ if (isset($_POST['entrar'])) {
     </script>
 </body>
 </html>
+
+<!-- Login Cadatro Finalizados -->
