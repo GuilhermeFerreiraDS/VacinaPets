@@ -33,8 +33,10 @@ if (isset($_POST['entrar'])) {
     if ($result->num_rows > 0) {
         $usuario = $result->fetch_assoc();
         if (password_verify($senha, $usuario['senha'])) {
-            $_SESSION['usuario'] = $usuario['nome'];
-            header("Location: painel.php");
+            $_SESSION['usuario'] = true;
+            $_SESSION['usuario_nome'] = $usuario['nome'];
+            $_SESSION['usuario_email'] = $usuario['email'];
+            header("Location: ../cadastroPet/index.php");
             exit();
         } else {
             echo "<script>alert('Senha incorreta!');</script>";
@@ -72,7 +74,7 @@ if (isset($_POST['entrar'])) {
         </form>
 
         <!-- CADASTRO -->
-        <form id="cadastroForm" method="POST">
+        <form id="cadastroForm" method="POST" style="display:none;">
             <h2>Cadastro</h2>
             <div class="form-group">
                 <label for="nome">Nome</label>
@@ -105,5 +107,3 @@ if (isset($_POST['entrar'])) {
     </script>
 </body>
 </html>
-
-<!-- Login Cadatro Finalizados -->
