@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <header>
+<header>
         <div class="container header-content">
             <div class="logo">
                 <span class="logo-icon">🐾</span>
@@ -15,15 +15,21 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#services">Serviços</a></li>
-                    <li><a href="#how-it-works">Como Funciona</a></li>
-                    <li><a href="#testimonials">Depoimentos</a></li>
-                    <li><a href="#contact">Contato</a></li>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Agendar Vacina</a></li>
+                    <li><a href="#">Histórico</a></li>
+                    
+                    <!-- Separador visual e os logins à direita -->
+                    <li class="login-separator">
+                        <ul style="display: flex; list-style: none;">
+                            <li class="login-item"><a href="#user-login">Login User</a></li>
+                            <li class="login-item" style="margin-left: 15px;"><a href="#pet-login">Login Pet</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <section class="hero">
     <div class="container hero-content">
         <h2>Cuide do seu pet com agendamento de vacinação fácil</h2>

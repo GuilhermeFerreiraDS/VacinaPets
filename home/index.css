@@ -29,13 +29,15 @@ body {
 }
 
 /* Header */
+/* Header */
 header {
     background-color: var(--azul-principal);
     padding: 20px 0;
-    box-shadow: 0 2px 10px rgb(255, 255, 255);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 100;
+    border-radius: 8px;
 }
 
 .header-content {
@@ -57,12 +59,13 @@ header {
 
 .logo-icon {
     font-size: 32px;
-    color: var(--preto);
+    color: var(--branco);
 }
 
 nav ul {
     display: flex;
     list-style: none;
+    align-items: center;
 }
 
 nav ul li {
@@ -74,10 +77,41 @@ nav ul li a {
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 4px;
 }
 
 nav ul li a:hover {
     color: var(--azul-claro);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Separador entre os itens principais e os logins */
+.login-separator {
+    margin-left: 40px;
+    padding-left: 30px;
+    position: relative;
+}
+
+.login-separator::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 24px;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Estilo especial para os botões de login */
+.login-item a {
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.login-item a:hover {
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Hero Section */
