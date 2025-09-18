@@ -15,15 +15,15 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Agendar Vacina</a></li>
-                    <li><a href="#">Histórico</a></li>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="../agendamento_vacina/agendamnento.php">Agendar Vacina</a></li>
+                    <li><a href="../historico/historico.php">Histórico</a></li>
                     
                     <!-- Separador visual e os logins à direita -->
                     <li class="login-separator">
                         <ul style="display: flex; list-style: none;">
-                            <li class="login-item"><a href="#user-login">Login User</a></li>
-                            <li class="login-item" style="margin-left: 15px;"><a href="#pet-login">Login Pet</a></li>
+                            <li class="login-item"><a href="../cadastro/index.php">Login User</a></li>
+                            <li class="login-item" style="margin-left: 15px;"><a href="../cadastroPet/index.php">Login Pet</a></li>
                         </ul>
                     </li>
                 </ul>
