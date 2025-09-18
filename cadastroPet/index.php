@@ -2,11 +2,18 @@
 session_start();
 require_once "../conexao.php";
 
-// Se não estiver logado, redireciona para login
+// Se não estiver logado, abre Modal
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../cadastro/index.php");
-    exit();
-}
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let modal = document.getElementById('loginModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        });
+    </script>";
+
+    }
 
 // Dados do usuário
 $emailUsuario = $_SESSION['usuario_email'] ?? '';

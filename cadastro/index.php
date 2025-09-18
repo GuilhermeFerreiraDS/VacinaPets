@@ -36,7 +36,7 @@ if (isset($_POST['entrar'])) {
             $_SESSION['usuario'] = true;
             $_SESSION['usuario_nome'] = $usuario['nome'];
             $_SESSION['usuario_email'] = $usuario['email'];
-            header("Location: ../cadastroPet/index.php");
+            header("Location: ../home/index.php");
             exit();
         } else {
             echo "<script>alert('Senha incorreta!');</script>";
