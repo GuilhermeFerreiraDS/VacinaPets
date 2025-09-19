@@ -33,9 +33,10 @@ if (isset($_POST['entrar'])) {
     if ($result->num_rows > 0) {
         $usuario = $result->fetch_assoc();
         if (password_verify($senha, $usuario['senha'])) {
-            $_SESSION['usuario'] = true;
+            $_SESSION['id_usuario'] = $usuario['id'];      // ID real do usuário
             $_SESSION['usuario_nome'] = $usuario['nome'];
             $_SESSION['usuario_email'] = $usuario['email'];
+            $_SESSION['usuario'] = true;                  // opcional, só pra compatibilidade
             header("Location: ../home/index.php");
             exit();
         } else {
@@ -48,12 +49,14 @@ if (isset($_POST['entrar'])) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VacinaPets</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <!-- LOGIN -->
@@ -100,10 +103,12 @@ if (isset($_POST['entrar'])) {
             document.getElementById("loginForm").style.display = "none";
             document.getElementById("cadastroForm").style.display = "block";
         }
+
         function mostrarLogin() {
             document.getElementById("cadastroForm").style.display = "none";
             document.getElementById("loginForm").style.display = "block";
         }
     </script>
 </body>
+
 </html>

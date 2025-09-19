@@ -2,5 +2,5 @@
 session_start();
 session_unset();
 session_destroy();
-header("Location: ../cadastro/index.php");
+header("Location: ../home/index.php");
 exit();
