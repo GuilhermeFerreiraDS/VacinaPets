@@ -21,7 +21,10 @@ SET time_zone = "+00:00";
 -- Banco de dados: `vacinapets`
 --
 
--- --------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS `vacinapets` 
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE `vacinapets`;
 
 --
 -- Estrutura da tabela `agendamentos`
@@ -39,7 +42,17 @@ CREATE TABLE `agendamentos` (
 
 -- --------------------------------------------------------
 
+-- Tabela para armazenar as avaliações
+CREATE TABLE IF NOT EXISTS `avaliacoes` (
+  `id_avaliacao` int(11) NOT NULL AUTO_INCREMENT,
+  `nome_usuario` varchar(100) NOT NULL,
+  `nota` int(11) NOT NULL CHECK (nota >= 1 AND nota <= 5),
+  `comentario` text DEFAULT NULL,
+  `data_avaliacao` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id_avaliacao`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 --
+
 -- Estrutura da tabela `pets`
 --
 

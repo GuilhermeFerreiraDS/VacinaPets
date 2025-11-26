@@ -84,6 +84,8 @@ if ($logado) {
                     <li><a href="index.php">Home</a></li>
                     <li><a href="#" id="agendarBtn">Agendar Vacina</a></li>
                     <li><a href="#" id="historicoBtn">Histórico</a></li>
+                    <li><a href="../artigos/artigos.html" id="agendarBtn">Artigos</a></li>
+                    <li><a href="../maps/maps.html" id="#">Nossas Lojas</a></li>
                     <li class="login-separator">
                         <ul style="display:flex; list-style:none;">
                             <li class="login-item"><a href="../cadastro/index.php">Login User</a></li>
@@ -92,6 +94,7 @@ if ($logado) {
                             </li>
                         </ul>
                     </li>
+                    
                 </ul>
             </nav>
         </div>
@@ -336,6 +339,453 @@ if ($logado) {
         echo "<script>alert('Agendamento recebido! Entraremos em contato para confirmar. Obrigado, $nome!');</script>";
     }
     ?>
+
+    <!-- Seção de Avaliação -->
+    <section class="avaliacao-section">
+        <div class="avaliacao-content">
+            <h2 class="avaliacao-title">Avalie nosso serviço</h2>
+            <p class="avaliacao-subtitle">Sua opinião é muito importante para nós</p>
+            
+            <div class="estrelas-container">
+                <span class="estrela" data-value="1">☆</span>
+                <span class="estrela" data-value="2">☆</span>
+                <span class="estrela" data-value="3">☆</span>
+                <span class="estrela" data-value="4">☆</span>
+                <span class="estrela" data-value="5">☆</span>
+            </div>
+            
+            <button class="btn-avaliar" onclick="abrirModal()">Enviar Avaliação</button>
+            <p class="avaliacao-texto">Clique nas estrelas e depois em "Enviar Avaliação"</p>
+        </div>
+    </section>
+
+    <!-- Modal de Avaliação -->
+    <div id="modal-avaliacao" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModal()">&times;</span>
+            <h3>Finalizar Avaliação</h3>
+            
+            <div class="avaliacao-selecionada">
+                <p>Sua avaliação: <span id="nota-selecionada">0</span> estrelas</p>
+                <div class="estrelas-modal">
+                    <span class="estrela-modal" data-value="1">☆</span>
+                    <span class="estrela-modal" data-value="2">☆</span>
+                    <span class="estrela-modal" data-value="3">☆</span>
+                    <span class="estrela-modal" data-value="4">☆</span>
+                    <span class="estrela-modal" data-value="5">☆</span>
+                </div>
+            </div>
+            
+            <form id="form-avaliacao">
+                <div class="form-group">
+                    <label for="nome">Seu nome:</label>
+                    <input type="text" id="nome" name="nome" required placeholder="Digite seu nome">
+                </div>
+                
+                <div class="form-group">
+                    <label for="comentario">Comentário (opcional):</label>
+                    <textarea id="comentario" name="comentario" placeholder="Conte sua experiência..."></textarea>
+                </div>
+                
+                <input type="hidden" id="nota" name="nota" value="0">
+                
+                <button type="submit" class="btn-enviar">Enviar Avaliação</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dentro do modal-content, depois do h3 -->
+<div id="mensagem-container"></div>
+
+<!-- Adicione o loading spinner -->
+<div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Enviando avaliação...</p>
+</div>
+
+    <style>
+        .avaliacao-section {
+            width: 100%;
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background-color: var(--cinza-claro);
+        }
+
+        .avaliacao-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .avaliacao-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .avaliacao-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .estrelas-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .estrela {
+            font-size: 3rem;
+            cursor: pointer;
+            color: #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .estrela:hover,
+        .estrela.ativa {
+            color: #ffc107;
+            transform: scale(1.2);
+        }
+
+        .btn-avaliar {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-avaliar:hover {
+            background: #5a6fd8;
+        }
+
+        .avaliacao-texto {
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .avaliacao-selecionada {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .estrelas-modal {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .estrela-modal {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ddd;
+            transition: color 0.3s ease;
+        }
+
+        .estrela-modal.ativa {
+            color: #ffc107;
+        }
+
+        .estrela-modal:hover {
+            color: #ffc107;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-enviar {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-enviar:hover {
+            background: #5a6fd8;
+        }
+
+        .loading {
+    display: none;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+    </style>
+
+    <script>
+       let notaSelecionada = 0;
+
+// Elementos do DOM
+const estrelas = document.querySelectorAll('.estrela');
+const estrelasModal = document.querySelectorAll('.estrela-modal');
+const modal = document.getElementById('modal-avaliacao');
+const notaSelecionadaSpan = document.getElementById('nota-selecionada');
+const notaInput = document.getElementById('nota');
+const formAvaliacao = document.getElementById('form-avaliacao');
+const mensagemContainer = document.getElementById('mensagem-container');
+const loading = document.getElementById('loading');
+
+// Sistema de estrelas principal
+estrelas.forEach(estrela => {
+    estrela.addEventListener('click', function() {
+        notaSelecionada = parseInt(this.getAttribute('data-value'));
+        atualizarEstrelas(estrelas, notaSelecionada);
+    });
+
+    // Efeito hover
+    estrela.addEventListener('mouseover', function() {
+        const valor = parseInt(this.getAttribute('data-value'));
+        estrelas.forEach(e => {
+            const eValor = parseInt(e.getAttribute('data-value'));
+            if (eValor <= valor) {
+                e.style.color = '#ffc107';
+            }
+        });
+    });
+
+    estrela.addEventListener('mouseout', function() {
+        estrelas.forEach(e => {
+            if (!e.classList.contains('ativa')) {
+                e.style.color = '#ddd';
+            }
+        });
+    });
+});
+
+// Sistema de estrelas do modal
+estrelasModal.forEach(estrela => {
+    estrela.addEventListener('click', function() {
+        notaSelecionada = parseInt(this.getAttribute('data-value'));
+        atualizarEstrelas(estrelasModal, notaSelecionada);
+        atualizarFormulario();
+    });
+
+    // Efeito hover no modal
+    estrela.addEventListener('mouseover', function() {
+        const valor = parseInt(this.getAttribute('data-value'));
+        estrelasModal.forEach(e => {
+            const eValor = parseInt(e.getAttribute('data-value'));
+            if (eValor <= valor) {
+                e.style.color = '#ffc107';
+            }
+        });
+    });
+
+    estrela.addEventListener('mouseout', function() {
+        estrelasModal.forEach(e => {
+            if (!e.classList.contains('ativa')) {
+                e.style.color = '#ddd';
+            }
+        });
+    });
+});
+
+// Atualizar visual das estrelas
+function atualizarEstrelas(estrelasArray, nota) {
+    estrelasArray.forEach(estrela => {
+        const valor = parseInt(estrela.getAttribute('data-value'));
+        if (valor <= nota) {
+            estrela.textContent = '⭐';
+            estrela.classList.add('ativa');
+        } else {
+            estrela.textContent = '☆';
+            estrela.classList.remove('ativa');
+        }
+    });
+}
+
+// Atualizar formulário
+function atualizarFormulario() {
+    notaInput.value = notaSelecionada;
+    notaSelecionadaSpan.textContent = notaSelecionada;
+}
+
+// Abrir modal
+function abrirModal() {
+    if (notaSelecionada === 0) {
+        mostrarMensagem('Por favor, selecione uma nota antes de enviar!', 'erro');
+        return;
+    }
+    modal.style.display = 'block';
+    atualizarEstrelas(estrelasModal, notaSelecionada);
+    atualizarFormulario();
+    // Limpar mensagens anteriores
+    mensagemContainer.innerHTML = '';
+}
+
+// Fechar modal
+function fecharModal() {
+    modal.style.display = 'none';
+}
+
+// Fechar modal clicando fora
+window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        fecharModal();
+    }
+});
+
+// Mostrar mensagens
+function mostrarMensagem(mensagem, tipo) {
+    mensagemContainer.innerHTML = `<div class="mensagem ${tipo}">${mensagem}</div>`;
+}
+
+// Enviar formulário via AJAX
+formAvaliacao.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (notaSelecionada === 0) {
+        mostrarMensagem('Por favor, selecione uma nota!', 'erro');
+        return;
+    }
+
+    // Mostrar loading
+    loading.style.display = 'block';
+    mensagemContainer.innerHTML = '';
+
+    // Coletar dados do formulário
+    const formData = new FormData(this);
+
+    // Enviar para o PHP
+    fetch('salvar_avaliacao.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Esconder loading
+        loading.style.display = 'none';
+        
+        if (data.status === 'success') {
+            mostrarMensagem(data.message, 'sucesso');
+            
+            // Limpar formulário após sucesso
+            setTimeout(() => {
+                formAvaliacao.reset();
+                notaSelecionada = 0;
+                atualizarEstrelas(estrelas, 0);
+                atualizarEstrelas(estrelasModal, 0);
+                fecharModal();
+            }, 2000);
+        } else {
+            mostrarMensagem(data.message, 'erro');
+        }
+    })
+    .catch(error => {
+        loading.style.display = 'none';
+        mostrarMensagem('Erro ao enviar avaliação. Tente novamente.', 'erro');
+        console.error('Erro:', error);
+    });
+});
+    </script>
+
 </body>
 
 </html>

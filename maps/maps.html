@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossas Lojas - VacinaPets</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .filtro-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .filtro-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filtro-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filtro-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .filtro-group select, .filtro-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .filtro-group select:focus, .filtro-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-filtrar {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .btn-filtrar:hover {
+            background: #5a6fd8;
+        }
+
+        .mapa-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        #mapa {
+            height: 500px;
+            width: 100%;
+        }
+
+        .lojas-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .loja-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .loja-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .loja-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .loja-nome {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .loja-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-aberto {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-fechado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .loja-info {
+            margin-bottom: 15px;
+        }
+
+        .loja-endereco, .loja-telefone, .loja-horario {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .loja-endereco i, .loja-telefone i, .loja-horario i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .loja-servicos {
+            margin-top: 15px;
+        }
+
+        .servicos-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .servicos-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .servico-tag {
+            background: #e9ecef;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #495057;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .filtro-container {
+                flex-direction: column;
+            }
+            
+            .filtro-group {
+                width: 100%;
+            }
+            
+            .lojas-container {
+                grid-template-columns: 1fr;
+            }
+            
+            #mapa {
+                height: 300px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Nossas Lojas VacinaPets</h1>
+            <p>Encontre a unidade mais próxima de você</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" id="total-lojas">0</div>
+                <div class="stat-label">Lojas em Todo Brasil</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="lojas-abertas">0</div>
+                <div class="stat-label">Lojas Abertas Agora</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="cidades-atendidas">0</div>
+                <div class="stat-label">Cidades Atendidas</div>
+            </div>
+        </div>
+
+        <div class="filtro-section">
+            <div class="filtro-container">
+                <div class="filtro-group">
+                    <label for="cidade"><i class="fas fa-city"></i> Cidade</label>
+                    <select id="cidade">
+                        <option value="">Todas as cidades</option>
+                        <option value="sao-paulo">São Paulo</option>
+                        <option value="rio-de-janeiro">Rio de Janeiro</option>
+                        <option value="belo-horizonte">Belo Horizonte</option>
+                        <option value="brasilia">Brasília</option>
+                        <option value="salvador">Salvador</option>
+                        <option value="curitiba">Curitiba</option>
+                        <option value="porto-alegre">Porto Alegre</option>
+                        <option value="fortaleza">Fortaleza</option>
+                    </select>
+                </div>
+                <div class="filtro-group">
+                    <label for="servico"><i class="fas fa-paw"></i> Serviço</label>
+                    <select id="servico">
+                        <option value="">Todos os serviços</option>
+                        <option value="vacinas">Vacinação</option>
+                        <option value="banho">Banho e Tosa</option>
+                        <option value="consulta">Consulta Veterinária</option>
+                        <option value="emergencia">Emergência 24h</option>
+                    </select>
+                </div>
+                <div class="filtro-group">
+                    <label for="busca"><i class="fas fa-search"></i> Buscar</label>
+                    <input type="text" id="busca" placeholder="Digite o nome da loja...">
+                </div>
+                <button class="btn-filtrar" onclick="filtrarLojas()">
+                    <i class="fas fa-filter"></i> Filtrar
+                </button>
+            </div>
+        </div>
+
+        <div class="mapa-container">
+            <div id="mapa"></div>
+        </div>
+
+        <div class="lojas-container" id="lista-lojas">
+            <!-- As lojas serão carregadas aqui via JavaScript -->
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Dados das lojas
+        const lojas = [
+            {
+                id: 1,
+                nome: "VacinaPets São Paulo - Centro",
+                cidade: "sao-paulo",
+                endereco: "Av. Paulista, 1000 - Jardim Paulista",
+                telefone: "(11) 9999-9999",
+                horario: "Seg-Sex: 8h-20h, Sáb: 8h-18h",
+                lat: -23.5635,
+                lng: -46.6540,
+                servicos: ["vacinas", "consulta", "banho", "emergencia"],
+                aberto: true
+            },
+            {
+                id: 2,
+                nome: "VacinaPets Rio de Janeiro - Copacabana",
+                cidade: "rio-de-janeiro",
+                endereco: "Av. Atlântica, 2000 - Copacabana",
+                telefone: "(21) 8888-8888",
+                horario: "Seg-Sex: 7h-22h, Sáb-Dom: 8h-20h",
+                lat: -22.9712,
+                lng: -43.1825,
+                servicos: ["vacinas", "banho", "emergencia"],
+                aberto: true
+            },
+            {
+                id: 3,
+                nome: "VacinaPets Belo Horizonte - Savassi",
+                cidade: "belo-horizonte",
+                endereco: "R. da Bahia, 1500 - Funcionários",
+                telefone: "(31) 7777-7777",
+                horario: "Seg-Sex: 8h-19h, Sáb: 8h-17h",
+                lat: -19.9313,
+                lng: -43.9385,
+                servicos: ["vacinas", "consulta", "banho"],
+                aberto: false
+            },
+            {
+                id: 4,
+                nome: "VacinaPets Brasília - Asa Sul",
+                cidade: "brasilia",
+                endereco: "SQS 105 - Asa Sul",
+                telefone: "(61) 6666-6666",
+                horario: "Seg-Sex: 7h-21h, Sáb: 7h-19h",
+                lat: -15.7941,
+                lng: -47.8825,
+                servicos: ["vacinas", "consulta", "emergencia"],
+                aberto: true
+            },
+            {
+                id: 5,
+                nome: "VacinaPets Salvador - Barra",
+                cidade: "salvador",
+                endereco: "Av. Oceânica, 500 - Barra",
+                telefone: "(71) 5555-5555",
+                horario: "Seg-Sex: 8h-20h, Sáb: 8h-18h",
+                lat: -13.0104,
+                lng: -38.5323,
+                servicos: ["vacinas", "banho"],
+                aberto: true
+            },
+            {
+                id: 6,
+                nome: "VacinaPets Curitiba - Batel",
+                cidade: "curitiba",
+                endereco: "R. XV de Novembro, 800 - Batel",
+                telefone: "(41) 4444-4444",
+                horario: "Seg-Sex: 8h-19h, Sáb: 8h-16h",
+                lat: -25.4284,
+                lng: -49.2733,
+                servicos: ["vacinas", "consulta", "banho", "emergencia"],
+                aberto: false
+            }
+        ];
+
+        let mapa;
+        let marcadores = [];
+
+        // Inicializar mapa
+        function inicializarMapa() {
+            mapa = L.map('mapa').setView([-15.7801, -47.9292], 4);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(mapa);
+
+            adicionarMarcadores(lojas);
+        }
+
+        // Adicionar marcadores no mapa
+        function adicionarMarcadores(lojasParaMostrar) {
+            // Limpar marcadores antigos
+            marcadores.forEach(marcador => mapa.removeLayer(marcador));
+            marcadores = [];
+
+            lojasParaMostrar.forEach(loja => {
+                const marcador = L.marker([loja.lat, loja.lng])
+                    .addTo(mapa)
+                    .bindPopup(`
+                        <strong>${loja.nome}</strong><br>
+                        ${loja.endereco}<br>
+                        ${loja.telefone}<br>
+                        <span style="color: ${loja.aberto ? 'green' : 'red'}">
+                            ${loja.aberto ? '● Aberto' : '● Fechado'}
+                        </span>
+                    `);
+                marcadores.push(marcador);
+            });
+
+            // Ajustar zoom para mostrar todos os marcadores
+            if (lojasParaMostrar.length > 0) {
+                const grupo = new L.featureGroup(marcadores);
+                mapa.fitBounds(grupo.getBounds().pad(0.1));
+            }
+        }
+
+        // Renderizar lista de lojas
+        function renderizarLojas(lojasParaMostrar) {
+            const container = document.getElementById('lista-lojas');
+            container.innerHTML = '';
+
+            lojasParaMostrar.forEach(loja => {
+                const card = document.createElement('div');
+                card.className = 'loja-card';
+                
+                card.innerHTML = `
+                    <div class="loja-header">
+                        <div class="loja-nome">${loja.nome}</div>
+                        <div class="loja-status ${loja.aberto ? 'status-aberto' : 'status-fechado'}">
+                            ${loja.aberto ? '● ABERTO' : '● FECHADO'}
+                        </div>
+                    </div>
+                    <div class="loja-info">
+                        <div class="loja-endereco">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${loja.endereco}
+                        </div>
+                        <div class="loja-telefone">
+                            <i class="fas fa-phone"></i>
+                            ${loja.telefone}
+                        </div>
+                        <div class="loja-horario">
+                            <i class="fas fa-clock"></i>
+                            ${loja.horario}
+                        </div>
+                    </div>
+                    <div class="loja-servicos">
+                        <div class="servicos-title">Serviços disponíveis:</div>
+                        <div class="servicos-list">
+                            ${loja.servicos.map(servico => {
+                                const servicosNomes = {
+                                    'vacinas': 'Vacinação',
+                                    'banho': 'Banho e Tosa',
+                                    'consulta': 'Consulta',
+                                    'emergencia': 'Emergência 24h'
+                                };
+                                return `<span class="servico-tag">${servicosNomes[servico]}</span>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            // Atualizar estatísticas
+            atualizarEstatisticas(lojasParaMostrar);
+        }
+
+        // Atualizar estatísticas
+        function atualizarEstatisticas(lojasParaMostrar) {
+            const cidadesUnicas = new Set(lojasParaMostrar.map(loja => loja.cidade));
+            const lojasAbertas = lojasParaMostrar.filter(loja => loja.aberto).length;
+
+            document.getElementById('total-lojas').textContent = lojasParaMostrar.length;
+            document.getElementById('lojas-abertas').textContent = lojasAbertas;
+            document.getElementById('cidades-atendidas').textContent = cidadesUnicas.size;
+        }
+
+        // Filtrar lojas
+        function filtrarLojas() {
+            const cidadeSelecionada = document.getElementById('cidade').value;
+            const servicoSelecionado = document.getElementById('servico').value;
+            const buscaTexto = document.getElementById('busca').value.toLowerCase();
+
+            let lojasFiltradas = lojas.filter(loja => {
+                const matchCidade = !cidadeSelecionada || loja.cidade === cidadeSelecionada;
+                const matchServico = !servicoSelecionado || loja.servicos.includes(servicoSelecionado);
+                const matchBusca = !buscaTexto || loja.nome.toLowerCase().includes(buscaTexto);
+
+                return matchCidade && matchServico && matchBusca;
+            });
+
+            renderizarLojas(lojasFiltradas);
+            adicionarMarcadores(lojasFiltradas);
+        }
+
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarMapa();
+            renderizarLojas(lojas);
+            
+            // Adicionar eventos aos filtros
+            document.getElementById('cidade').addEventListener('change', filtrarLojas);
+            document.getElementById('servico').addEventListener('change', filtrarLojas);
+            document.getElementById('busca').addEventListener('input', filtrarLojas);
+        });
+    </script>
+
+<footer id="contact">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>PetVax</h3>
+                <p>Oferecemos a melhor solução para agendamento de vacinação pet, com praticidade e cuidado que seu animal merece.</p>
+                
+                <!-- Sistema de Avaliação no Footer -->
+                <div class="avaliacao-footer">
+                    <p><strong>Avalie nosso serviço:</strong></p>
+                    <div class="estrelas-avaliacao">
+                        <span class="estrela" data-value="1">☆</span>
+                        <span class="estrela" data-value="2">☆</span>
+                        <span class="estrela" data-value="3">☆</span>
+                        <span class="estrela" data-value="4">☆</span>
+                        <span class="estrela" data-value="5">☆</span>
+                    </div>
+                    <small>Clique nas estrelas para avaliar</small>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Links Rápidos</h3>
+                <a href="#services">Serviços</a>
+                <a href="#how-it-works">Como Funciona</a>
+                <a href="#testimonials">Depoimentos</a>
+                <a href="#agendar">Agendar</a>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contato</h3>
+                <p>contato@petvax.com.br</p>
+                <p>(11) 99999-9999</p>
+                <p>Av. Paulista, 1000 - São Paulo, SP</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Redes Sociais</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">i</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">y</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 PetVax - Todos os direitos reservados</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal de Avaliação -->
+<div id="modal-avaliacao" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Avalie nosso serviço</h3>
+        
+        <div class="avaliacao-selecionada">
+            <p>Sua avaliação: <span id="nota-selecionada">0</span> estrelas</p>
+            <div class="estrelas-modal">
+                <span class="estrela-modal" data-value="1">☆</span>
+                <span class="estrela-modal" data-value="2">☆</span>
+                <span class="estrela-modal" data-value="3">☆</span>
+                <span class="estrela-modal" data-value="4">☆</span>
+                <span class="estrela-modal" data-value="5">☆</span>
+            </div>
+        </div>
+        
+        <form id="form-avaliacao">
+            <div class="form-group">
+                <label for="nome">Seu nome:</label>
+                <input type="text" id="nome" name="nome" required placeholder="Digite seu nome">
+            </div>
+            
+            <div class="form-group">
+                <label for="comentario">Comentário (opcional):</label>
+                <textarea id="comentario" name="comentario" placeholder="Conte sua experiência..."></textarea>
+            </div>
+            
+            <input type="hidden" id="nota" name="nota" value="0">
+            
+            <button type="submit" class="btn-enviar">Enviar Avaliação</button>
+        </form>
+    </div>
+</div>
+
+<!-- CSS do Sistema de Avaliação -->
+<style>
+/* Sistema de Avaliação no Footer */
+.avaliacao-footer {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+}
+
+.estrelas-avaliacao {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.estrela {
+    font-size: 24px;
+    cursor: pointer;
+    color: #ddd;
+    transition: all 0.3s ease;
+}
+
+.estrela:hover,
+.estrela.ativa {
+    color: #ffc107;
+    transform: scale(1.2);
+}
+
+.avaliacao-footer small {
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+}
+
+/* Modal de Avaliação */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-modal {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+.avaliacao-selecionada {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.estrelas-modal {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.estrela-modal {
+    font-size: 28px;
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.3s ease;
+}
+
+.estrela-modal.ativa {
+    color: #ffc107;
+}
+
+.estrela-modal:hover {
+    color: #ffc107;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.btn-enviar {
+    width: 100%;
+    padding: 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-enviar:hover {
+    background: #5a6fd8;
+}
+
+.btn-enviar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Mensagens de feedback */
+.mensagem {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.mensagem.sucesso {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.mensagem.erro {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+</style>
+
+<!-- JavaScript do Sistema de Avaliação -->
+<script>
+let notaSelecionada = 0;
+
+// Elementos do DOM
+const estrelasFooter = document.querySelectorAll('.estrela');
+const estrelasModal = document.querySelectorAll('.estrela-modal');
+const modal = document.getElementById('modal-avaliacao');
+const closeModal = document.querySelector('.close-modal');
+const formAvaliacao = document.getElementById('form-avaliacao');
+const notaInput = document.getElementById('nota');
+const notaSelecionadaSpan = document.getElementById('nota-selecionada');
+
+// Abrir modal ao clicar nas estrelas do footer
+estrelasFooter.forEach(estrela => {
+    estrela.addEventListener('click', function() {
+        notaSelecionada = parseInt(this.getAttribute('data-value'));
+        abrirModal();
+    });
+});
+
+// Fechar modal
+closeModal.addEventListener('click', fecharModal);
+window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        fecharModal();
+    }
+});
+
+// Sistema de estrelas no modal
+estrelasModal.forEach(estrela => {
+    estrela.addEventListener('click', function() {
+        notaSelecionada = parseInt(this.getAttribute('data-value'));
+        atualizarEstrelasModal();
+        atualizarFormulario();
+    });
+});
+
+// Atualizar visual das estrelas no modal
+function atualizarEstrelasModal() {
+    estrelasModal.forEach(estrela => {
+        const valor = parseInt(estrela.getAttribute('data-value'));
+        if (valor <= notaSelecionada) {
+            estrela.textContent = '⭐';
+            estrela.classList.add('ativa');
+        } else {
+            estrela.textContent = '☆';
+            estrela.classList.remove('ativa');
+        }
+    });
+    
+    notaSelecionadaSpan.textContent = notaSelecionada;
+}
+
+// Atualizar formulário
+function atualizarFormulario() {
+    notaInput.value = notaSelecionada;
+}
+
+// Abrir modal
+function abrirModal() {
+    modal.style.display = 'block';
+    atualizarEstrelasModal();
+    atualizarFormulario();
+    
+    // Destacar estrelas no footer
+    estrelasFooter.forEach(estrela => {
+        const valor = parseInt(estrela.getAttribute('data-value'));
+        if (valor <= notaSelecionada) {
+            estrela.classList.add('ativa');
+        } else {
+            estrela.classList.remove('ativa');
+        }
+    });
+}
+
+// Fechar modal
+function fecharModal() {
+    modal.style.display = 'none';
+    // Resetar seleção do footer quando fechar sem enviar
+    if (!document.querySelector('.mensagem.sucesso')) {
+        estrelasFooter.forEach(estrela => {
+            estrela.classList.remove('ativa');
+        });
+        notaSelecionada = 0;
+    }
+}
+
+// Enviar avaliação via AJAX
+formAvaliacao.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (notaSelecionada === 0) {
+        alert('Por favor, selecione uma nota!');
+        return;
+    }
+    
+    const formData = new FormData(this);
+    
+    fetch('salvar_avaliacao.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        const [status, mensagem] = data.split('|');
+        
+        // Remover mensagens anteriores
+        const mensagensAnteriores = document.querySelectorAll('.mensagem');
+        mensagensAnteriores.forEach(msg => msg.remove());
+        
+        // Adicionar nova mensagem
+        const mensagemDiv = document.createElement('div');
+        mensagemDiv.className = `mensagem ${status}`;
+        mensagemDiv.textContent = mensagem;
+        
+        formAvaliacao.prepend(mensagemDiv);
+        
+        if (status === 'success') {
+            // Limpar formulário após sucesso
+            formAvaliacao.reset();
+            notaSelecionada = 0;
+            atualizarEstrelasModal();
+            
+            // Fechar modal após 2 segundos
+            setTimeout(() => {
+                fecharModal();
+            }, 2000);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao enviar avaliação. Tente novamente.');
+    });
+});
+
+// Efeitos hover nas estrelas do footer
+estrelasFooter.forEach(estrela => {
+    estrela.addEventListener('mouseover', function() {
+        const valor = parseInt(this.getAttribute('data-value'));
+        estrelasFooter.forEach(e => {
+            const eValor = parseInt(e.getAttribute('data-value'));
+            if (eValor <= valor) {
+                e.style.color = '#ffc107';
+            }
+        });
+    });
+    
+    estrela.addEventListener('mouseout', function() {
+        estrelasFooter.forEach(e => {
+            if (!e.classList.contains('ativa')) {
+                e.style.color = '#ddd';
+            }
+        });
+    });
+});
+
+// Efeitos hover nas estrelas do modal
+estrelasModal.forEach(estrela => {
+    estrela.addEventListener('mouseover', function() {
+        const valor = parseInt(this.getAttribute('data-value'));
+        estrelasModal.forEach(e => {
+            const eValor = parseInt(e.getAttribute('data-value'));
+            if (eValor <= valor) {
+                e.style.color = '#ffc107';
+            }
+        });
+    });
+    
+    estrela.addEventListener('mouseout', function() {
+        estrelasModal.forEach(e => {
+            if (!e.classList.contains('ativa')) {
+                e.style.color = '#ddd';
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
