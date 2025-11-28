@@ -337,7 +337,7 @@ nav ul li a:hover {
 
 /* Footer */
 footer {
-    background-color: var(--branco);
+    background-color: var(--cinza-claro);
     color: var(--preto);
     padding: 50px 0 20px;
 }
@@ -415,3 +415,4 @@ footer {
         margin-bottom: 40px;
     }
 }
+

@@ -70,6 +70,27 @@ if ($logado) {
             color: #fff;
         }
     </style>
+    <style>
+        .chart-container {
+            width: 700px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            width: 100% !important;
+            max-width: 650px;
+            height: 350px !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,23 +103,25 @@ if ($logado) {
             <nav>
                 <ul>
                     <li><a href="index.php">Home</a></li>
+
+                    <li><a href="../artigos/artigos.html">Artigos</a></li>
+                    <li><a href="../maps/maps.html" id="#">Nossas Lojas</a></li>
                     <li><a href="#" id="agendarBtn">Agendar Vacina</a></li>
                     <li><a href="#" id="historicoBtn">Histórico</a></li>
-                    <li><a href="../artigos/artigos.html" id="agendarBtn">Artigos</a></li>
-                    <li><a href="../maps/maps.html" id="#">Nossas Lojas</a></li>
                     <li class="login-separator">
                         <ul style="display:flex; list-style:none;">
                             <li class="login-item"><a href="../cadastro/index.php">Login User</a></li>
                             <li class="login-item" style="margin-left:15px;">
-                                <a href="#" id="loginPetLink">Login Pet</a>
+                                <a href="#" id="loginPetLink">Cadastro Pet</a>
                             </li>
                         </ul>
                     </li>
-                    
+
                 </ul>
             </nav>
         </div>
     </header>
+
 
     <!-- Modal Login Pet -->
     <div id="loginModal">
@@ -236,45 +259,54 @@ if ($logado) {
         <div class="container">
             <h2>Pronto para proteger seu pet?</h2>
             <p>Agende agora a vacinação do seu animal de estimação e garanta uma vida longa e saudável para ele</p>
-           <a href="../agendamento_vacina/agendamento.php" id="agendarCTA" class="btn btn-reverse">Fazer Agendamento</a>
+            <a href="../agendamento_vacina/agendamento.php" id="agendarCTA" class="btn btn-reverse">Fazer Agendamento</a>
         </div>
     </section>
 
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>PetVax</h3>
-                    <p>Oferecemos a melhor solução para agendamento de vacinação pet, com praticidade e cuidado que seu animal merece.</p>
-                </div>
-                <div class="footer-column">
-                    <h3>Links Rápidos</h3>
-                    <a href="#services">Serviços</a>
-                    <a href="#how-it-works">Como Funciona</a>
-                    <a href="#testimonials">Depoimentos</a>
-                    <a href="#agendar">Agendar</a>
-                </div>
-                <div class="footer-column">
-                    <h3>Contato</h3>
-                    <p>contato@petvax.com.br</p>
-                    <p>(11) 99999-9999</p>
-                    <p>Av. Paulista, 1000 - São Paulo, SP</p>
-                </div>
-                <div class="footer-column">
-                    <h3>Redes Sociais</h3>
-                    <div class="social-links">
-                        <a href="#" class="social-icon">f</a>
-                        <a href="#" class="social-icon">i</a>
-                        <a href="#" class="social-icon">t</a>
-                        <a href="#" class="social-icon">y</a>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 PetVax - Todos os direitos reservados</p>
-            </div>
+    <section class="testimonials" id="testimonials">
+        <div class="chart-container">
+            <h2>Vacinas Aplicadas por Ano</h2>
+            <canvas id="vacinaChart"></canvas>
         </div>
-    </footer>
+    </section>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+        // Dados de exemplo — edite os valores aqui
+        const anos = ["2020", "2021", "2022", "2023", "2024", "2025"];
+        const vacinas = [30, 45, 50, 70, 90, 110]; // quantidade de vacinas por ano
+
+        const ctx = document.getElementById("vacinaChart").getContext("2d");
+
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: anos,
+                datasets: [{
+                    label: "Vacinas aplicadas",
+                    data: vacinas,
+                    backgroundColor: "rgba(54, 162, 235, 0.6)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 2,
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 10
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
 
     <script>
         // Variáveis vindas do PHP
@@ -345,7 +377,7 @@ if ($logado) {
         <div class="avaliacao-content">
             <h2 class="avaliacao-title">Avalie nosso serviço</h2>
             <p class="avaliacao-subtitle">Sua opinião é muito importante para nós</p>
-            
+
             <div class="estrelas-container">
                 <span class="estrela" data-value="1">☆</span>
                 <span class="estrela" data-value="2">☆</span>
@@ -353,7 +385,7 @@ if ($logado) {
                 <span class="estrela" data-value="4">☆</span>
                 <span class="estrela" data-value="5">☆</span>
             </div>
-            
+
             <button class="btn-avaliar" onclick="abrirModal()">Enviar Avaliação</button>
             <p class="avaliacao-texto">Clique nas estrelas e depois em "Enviar Avaliação"</p>
         </div>
@@ -364,7 +396,7 @@ if ($logado) {
         <div class="modal-content">
             <span class="close-modal" onclick="fecharModal()">&times;</span>
             <h3>Finalizar Avaliação</h3>
-            
+
             <div class="avaliacao-selecionada">
                 <p>Sua avaliação: <span id="nota-selecionada">0</span> estrelas</p>
                 <div class="estrelas-modal">
@@ -375,33 +407,72 @@ if ($logado) {
                     <span class="estrela-modal" data-value="5">☆</span>
                 </div>
             </div>
-            
+
             <form id="form-avaliacao">
                 <div class="form-group">
                     <label for="nome">Seu nome:</label>
                     <input type="text" id="nome" name="nome" required placeholder="Digite seu nome">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="comentario">Comentário (opcional):</label>
                     <textarea id="comentario" name="comentario" placeholder="Conte sua experiência..."></textarea>
                 </div>
-                
+
                 <input type="hidden" id="nota" name="nota" value="0">
-                
+
                 <button type="submit" class="btn-enviar">Enviar Avaliação</button>
             </form>
         </div>
     </div>
 
     <!-- Dentro do modal-content, depois do h3 -->
-<div id="mensagem-container"></div>
+    <div id="mensagem-container"></div>
 
-<!-- Adicione o loading spinner -->
-<div class="loading" id="loading">
-    <div class="spinner"></div>
-    <p>Enviando avaliação...</p>
-</div>
+    <!-- Adicione o loading spinner -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Enviando avaliação...</p>
+    </div>
+
+
+
+    
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>PetVax</h3>
+                    <p>Oferecemos a melhor solução para agendamento de vacinação pet, com praticidade e cuidado que seu animal merece.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <a href="#services">Serviços</a>
+                    <a href="#how-it-works">Como Funciona</a>
+                    <a href="#testimonials">Depoimentos</a>
+                    <a href="#agendar">Agendar</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <p>contato@petvax.com.br</p>
+                    <p>(11) 99999-9999</p>
+                    <p>Av. Paulista, 1000 - São Paulo, SP</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Redes Sociais</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">f</a>
+                        <a href="#" class="social-icon">i</a>
+                        <a href="#" class="social-icon">t</a>
+                        <a href="#" class="social-icon">y</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 PetVax - Todos os direitos reservados</p>
+            </div>
+        </div>
+    </footer>
 
     <style>
         .avaliacao-section {
@@ -413,14 +484,14 @@ if ($logado) {
             align-items: center;
             text-align: center;
             padding: 20px;
-            background-color: var(--cinza-claro);
+            background-color: var(--branco);
         }
 
         .avaliacao-content {
-            background: white;
+            background-color: var(--cinza-claro);
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             max-width: 500px;
             width: 100%;
         }
@@ -478,6 +549,7 @@ if ($logado) {
             color: #666;
             font-size: 0.9rem;
         }
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -487,7 +559,7 @@ if ($logado) {
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-content {
@@ -502,8 +574,15 @@ if ($logado) {
         }
 
         @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .close-modal {
@@ -598,192 +677,197 @@ if ($logado) {
         }
 
         .loading {
-    display: none;
-    text-align: center;
-    margin: 10px 0;
-}
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
 
-.spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #667eea;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 10px;
-}
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 
     <script>
-       let notaSelecionada = 0;
+        let notaSelecionada = 0;
 
-// Elementos do DOM
-const estrelas = document.querySelectorAll('.estrela');
-const estrelasModal = document.querySelectorAll('.estrela-modal');
-const modal = document.getElementById('modal-avaliacao');
-const notaSelecionadaSpan = document.getElementById('nota-selecionada');
-const notaInput = document.getElementById('nota');
-const formAvaliacao = document.getElementById('form-avaliacao');
-const mensagemContainer = document.getElementById('mensagem-container');
-const loading = document.getElementById('loading');
+        // Elementos do DOM
+        const estrelas = document.querySelectorAll('.estrela');
+        const estrelasModal = document.querySelectorAll('.estrela-modal');
+        const modal = document.getElementById('modal-avaliacao');
+        const notaSelecionadaSpan = document.getElementById('nota-selecionada');
+        const notaInput = document.getElementById('nota');
+        const formAvaliacao = document.getElementById('form-avaliacao');
+        const mensagemContainer = document.getElementById('mensagem-container');
+        const loading = document.getElementById('loading');
 
-// Sistema de estrelas principal
-estrelas.forEach(estrela => {
-    estrela.addEventListener('click', function() {
-        notaSelecionada = parseInt(this.getAttribute('data-value'));
-        atualizarEstrelas(estrelas, notaSelecionada);
-    });
+        // Sistema de estrelas principal
+        estrelas.forEach(estrela => {
+            estrela.addEventListener('click', function() {
+                notaSelecionada = parseInt(this.getAttribute('data-value'));
+                atualizarEstrelas(estrelas, notaSelecionada);
+            });
 
-    // Efeito hover
-    estrela.addEventListener('mouseover', function() {
-        const valor = parseInt(this.getAttribute('data-value'));
-        estrelas.forEach(e => {
-            const eValor = parseInt(e.getAttribute('data-value'));
-            if (eValor <= valor) {
-                e.style.color = '#ffc107';
-            }
+            // Efeito hover
+            estrela.addEventListener('mouseover', function() {
+                const valor = parseInt(this.getAttribute('data-value'));
+                estrelas.forEach(e => {
+                    const eValor = parseInt(e.getAttribute('data-value'));
+                    if (eValor <= valor) {
+                        e.style.color = '#ffc107';
+                    }
+                });
+            });
+
+            estrela.addEventListener('mouseout', function() {
+                estrelas.forEach(e => {
+                    if (!e.classList.contains('ativa')) {
+                        e.style.color = '#ddd';
+                    }
+                });
+            });
         });
-    });
 
-    estrela.addEventListener('mouseout', function() {
-        estrelas.forEach(e => {
-            if (!e.classList.contains('ativa')) {
-                e.style.color = '#ddd';
-            }
+        // Sistema de estrelas do modal
+        estrelasModal.forEach(estrela => {
+            estrela.addEventListener('click', function() {
+                notaSelecionada = parseInt(this.getAttribute('data-value'));
+                atualizarEstrelas(estrelasModal, notaSelecionada);
+                atualizarFormulario();
+            });
+
+            // Efeito hover no modal
+            estrela.addEventListener('mouseover', function() {
+                const valor = parseInt(this.getAttribute('data-value'));
+                estrelasModal.forEach(e => {
+                    const eValor = parseInt(e.getAttribute('data-value'));
+                    if (eValor <= valor) {
+                        e.style.color = '#ffc107';
+                    }
+                });
+            });
+
+            estrela.addEventListener('mouseout', function() {
+                estrelasModal.forEach(e => {
+                    if (!e.classList.contains('ativa')) {
+                        e.style.color = '#ddd';
+                    }
+                });
+            });
         });
-    });
-});
 
-// Sistema de estrelas do modal
-estrelasModal.forEach(estrela => {
-    estrela.addEventListener('click', function() {
-        notaSelecionada = parseInt(this.getAttribute('data-value'));
-        atualizarEstrelas(estrelasModal, notaSelecionada);
-        atualizarFormulario();
-    });
-
-    // Efeito hover no modal
-    estrela.addEventListener('mouseover', function() {
-        const valor = parseInt(this.getAttribute('data-value'));
-        estrelasModal.forEach(e => {
-            const eValor = parseInt(e.getAttribute('data-value'));
-            if (eValor <= valor) {
-                e.style.color = '#ffc107';
-            }
-        });
-    });
-
-    estrela.addEventListener('mouseout', function() {
-        estrelasModal.forEach(e => {
-            if (!e.classList.contains('ativa')) {
-                e.style.color = '#ddd';
-            }
-        });
-    });
-});
-
-// Atualizar visual das estrelas
-function atualizarEstrelas(estrelasArray, nota) {
-    estrelasArray.forEach(estrela => {
-        const valor = parseInt(estrela.getAttribute('data-value'));
-        if (valor <= nota) {
-            estrela.textContent = '⭐';
-            estrela.classList.add('ativa');
-        } else {
-            estrela.textContent = '☆';
-            estrela.classList.remove('ativa');
+        // Atualizar visual das estrelas
+        function atualizarEstrelas(estrelasArray, nota) {
+            estrelasArray.forEach(estrela => {
+                const valor = parseInt(estrela.getAttribute('data-value'));
+                if (valor <= nota) {
+                    estrela.textContent = '⭐';
+                    estrela.classList.add('ativa');
+                } else {
+                    estrela.textContent = '☆';
+                    estrela.classList.remove('ativa');
+                }
+            });
         }
-    });
-}
 
-// Atualizar formulário
-function atualizarFormulario() {
-    notaInput.value = notaSelecionada;
-    notaSelecionadaSpan.textContent = notaSelecionada;
-}
+        // Atualizar formulário
+        function atualizarFormulario() {
+            notaInput.value = notaSelecionada;
+            notaSelecionadaSpan.textContent = notaSelecionada;
+        }
 
-// Abrir modal
-function abrirModal() {
-    if (notaSelecionada === 0) {
-        mostrarMensagem('Por favor, selecione uma nota antes de enviar!', 'erro');
-        return;
-    }
-    modal.style.display = 'block';
-    atualizarEstrelas(estrelasModal, notaSelecionada);
-    atualizarFormulario();
-    // Limpar mensagens anteriores
-    mensagemContainer.innerHTML = '';
-}
+        // Abrir modal
+        function abrirModal() {
+            if (notaSelecionada === 0) {
+                mostrarMensagem('Por favor, selecione uma nota antes de enviar!', 'erro');
+                return;
+            }
+            modal.style.display = 'block';
+            atualizarEstrelas(estrelasModal, notaSelecionada);
+            atualizarFormulario();
+            // Limpar mensagens anteriores
+            mensagemContainer.innerHTML = '';
+        }
 
-// Fechar modal
-function fecharModal() {
-    modal.style.display = 'none';
-}
+        // Fechar modal
+        function fecharModal() {
+            modal.style.display = 'none';
+        }
 
-// Fechar modal clicando fora
-window.addEventListener('click', function(event) {
-    if (event.target === modal) {
-        fecharModal();
-    }
-});
-
-// Mostrar mensagens
-function mostrarMensagem(mensagem, tipo) {
-    mensagemContainer.innerHTML = `<div class="mensagem ${tipo}">${mensagem}</div>`;
-}
-
-// Enviar formulário via AJAX
-formAvaliacao.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    if (notaSelecionada === 0) {
-        mostrarMensagem('Por favor, selecione uma nota!', 'erro');
-        return;
-    }
-
-    // Mostrar loading
-    loading.style.display = 'block';
-    mensagemContainer.innerHTML = '';
-
-    // Coletar dados do formulário
-    const formData = new FormData(this);
-
-    // Enviar para o PHP
-    fetch('salvar_avaliacao.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Esconder loading
-        loading.style.display = 'none';
-        
-        if (data.status === 'success') {
-            mostrarMensagem(data.message, 'sucesso');
-            
-            // Limpar formulário após sucesso
-            setTimeout(() => {
-                formAvaliacao.reset();
-                notaSelecionada = 0;
-                atualizarEstrelas(estrelas, 0);
-                atualizarEstrelas(estrelasModal, 0);
+        // Fechar modal clicando fora
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
                 fecharModal();
-            }, 2000);
-        } else {
-            mostrarMensagem(data.message, 'erro');
+            }
+        });
+
+        // Mostrar mensagens
+        function mostrarMensagem(mensagem, tipo) {
+            mensagemContainer.innerHTML = `<div class="mensagem ${tipo}">${mensagem}</div>`;
         }
-    })
-    .catch(error => {
-        loading.style.display = 'none';
-        mostrarMensagem('Erro ao enviar avaliação. Tente novamente.', 'erro');
-        console.error('Erro:', error);
-    });
-});
+
+        // Enviar formulário via AJAX
+        formAvaliacao.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (notaSelecionada === 0) {
+                mostrarMensagem('Por favor, selecione uma nota!', 'erro');
+                return;
+            }
+
+            // Mostrar loading
+            loading.style.display = 'block';
+            mensagemContainer.innerHTML = '';
+
+            // Coletar dados do formulário
+            const formData = new FormData(this);
+
+            // Enviar para o PHP
+            fetch('salvar_avaliacao.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Esconder loading
+                    loading.style.display = 'none';
+
+                    if (data.status === 'success') {
+                        mostrarMensagem(data.message, 'sucesso');
+
+                        // Limpar formulário após sucesso
+                        setTimeout(() => {
+                            formAvaliacao.reset();
+                            notaSelecionada = 0;
+                            atualizarEstrelas(estrelas, 0);
+                            atualizarEstrelas(estrelasModal, 0);
+                            fecharModal();
+                        }, 2000);
+                    } else {
+                        mostrarMensagem(data.message, 'erro');
+                    }
+                })
+                .catch(error => {
+                    loading.style.display = 'none';
+                    mostrarMensagem('Erro ao enviar avaliação. Tente novamente.', 'erro');
+                    console.error('Erro:', error);
+                });
+        });
     </script>
 
 </body>
